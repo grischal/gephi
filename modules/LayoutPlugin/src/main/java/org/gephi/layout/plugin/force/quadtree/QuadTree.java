@@ -65,6 +65,7 @@ public class QuadTree implements Node {
     private final float posX;
     private final float posY;
     private final float size;
+    private int role;
     private float centerMassX;  // X and Y position of the center of mass
     private float centerMassY;
     private int mass;  // Mass of this tree (the number of nodes it contains)
@@ -104,6 +105,7 @@ public class QuadTree implements Node {
         this.isLeaf = true;
         mass = 0;
         add = new FirstAdd();
+        role = 1;
     }
 
     @Override
@@ -154,6 +156,12 @@ public class QuadTree implements Node {
     public float y() {
         return centerMassY;
     }
+    
+    @Override
+    public int role() {
+        return role;
+    }
+
 
     public int mass() {
         return mass;
@@ -283,6 +291,11 @@ public class QuadTree implements Node {
     @Override
     public void setSize(float size) {
         throw new UnsupportedOperationException("Not supported.");
+    }
+    
+    @Override
+    public void setRole(int role) {
+        this.role = role;
     }
 
     @Override

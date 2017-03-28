@@ -137,6 +137,12 @@ public abstract class AbstractProcessor {
         } else if (node.size() == 0) {
             node.setSize(10f);
         }
+        
+        if (nodeDraft.getRole() != 0 && !Float.isNaN(nodeDraft.getRole())) {
+            node.setRole(nodeDraft.getRole());
+        } else if (node.role() == 0) {
+            node.setRole(0);
+        }
 
         //Timeset
         if (nodeDraft.getTimeSet() != null) {

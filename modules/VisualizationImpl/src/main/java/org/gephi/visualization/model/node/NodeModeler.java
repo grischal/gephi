@@ -41,7 +41,9 @@
  */
 package org.gephi.visualization.model.node;
 
+import static com.jogamp.opengl.GL.GL_LINES;
 import com.jogamp.opengl.GL2;
+import static com.jogamp.opengl.GL2.GL_POLYGON;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import org.gephi.graph.api.Node;
@@ -55,13 +57,31 @@ import org.gephi.visualization.opengl.CompatibilityEngine;
  */
 public class NodeModeler extends Modeler {
 
-    public int SHAPE_DIAMOND;
-    public int SHAPE_DISK16;
-    public int SHAPE_DISK32;
-    public int SHAPE_DISK64;
-    public int BORDER16;
-    public int BORDER32;
-    public int BORDER64;
+    public int SHAPE_BLUE_DISK16;
+    public int SHAPE_BLUE_DISK32;
+    public int SHAPE_BLUE_DISK64;
+    public int SHAPE_PURPLE_DISK16;
+    public int SHAPE_PURPLE_DISK32;
+    public int SHAPE_PURPLE_DISK64;
+    public int SHAPE_ORANGE_DISK16;
+    public int SHAPE_ORANGE_DISK32;
+    public int SHAPE_ORANGE_DISK64;
+    public int SHAPE_CYAN_DISK16;
+    public int SHAPE_CYAN_DISK32;
+    public int SHAPE_CYAN_DISK64;
+    
+    public int SHAPE_SELECT_BLUE_DISK16;
+    public int SHAPE_SELECT_BLUE_DISK32;
+    public int SHAPE_SELECT_BLUE_DISK64;
+    public int SHAPE_SELECT_PURPLE_DISK16;
+    public int SHAPE_SELECT_PURPLE_DISK32;
+    public int SHAPE_SELECT_PURPLE_DISK64;
+    public int SHAPE_SELECT_ORANGE_DISK16;
+    public int SHAPE_SELECT_ORANGE_DISK32;
+    public int SHAPE_SELECT_ORANGE_DISK64;
+    public int SHAPE_SELECT_CYAN_DISK16;
+    public int SHAPE_SELECT_CYAN_DISK32;
+    public int SHAPE_SELECT_CYAN_DISK64;
 
     public NodeModeler(CompatibilityEngine engine) {
         super(engine);
@@ -69,8 +89,15 @@ public class NodeModeler extends Modeler {
 
     public NodeModel initModel(Node n) {
         NodeDiskModel obj = new NodeDiskModel((Node) n);
-        obj.modelType = SHAPE_DISK64;
-        obj.modelBorderType = BORDER64;
+        obj.modelBlueType = SHAPE_BLUE_DISK64;
+        obj.modelPurpleType = SHAPE_PURPLE_DISK64;
+        obj.modelOrangeType = SHAPE_ORANGE_DISK64;
+        obj.modelCyanType = SHAPE_CYAN_DISK64;
+        
+        obj.modelSelectBlueType = SHAPE_SELECT_BLUE_DISK64;
+        obj.modelSelectPurpleType = SHAPE_SELECT_PURPLE_DISK64;
+        obj.modelSelectOrangeType = SHAPE_SELECT_ORANGE_DISK64;
+        obj.modelSelectCyanType = SHAPE_SELECT_CYAN_DISK64;
 
         chooseModel(obj);
         return obj;
@@ -80,71 +107,601 @@ public class NodeModeler extends Modeler {
     public void chooseModel(Model object3d) {
         NodeDiskModel obj = (NodeDiskModel) object3d;
         if (config.isDisableLOD()) {
-            obj.modelType = SHAPE_DISK64;
-            obj.modelBorderType = BORDER64;
+            obj.modelBlueType = SHAPE_BLUE_DISK64;
+            obj.modelPurpleType = SHAPE_PURPLE_DISK64;
+            obj.modelOrangeType = SHAPE_ORANGE_DISK64;
+            obj.modelCyanType = SHAPE_CYAN_DISK64;
+            
+            obj.modelSelectBlueType = SHAPE_SELECT_BLUE_DISK64;
+            obj.modelSelectPurpleType = SHAPE_SELECT_PURPLE_DISK64;
+            obj.modelSelectOrangeType = SHAPE_SELECT_ORANGE_DISK64;
+            obj.modelSelectCyanType = SHAPE_SELECT_CYAN_DISK64;
             return;
         }
 
         float distance = cameraDistance(obj) / (obj.getNode().size() * drawable.getGlobalScale());
-        if (distance > 600) {
-            obj.modelType = SHAPE_DIAMOND;
-            obj.modelBorderType = -1;
-        } else if (distance > 50) {
-            obj.modelType = SHAPE_DISK16;
-            obj.modelBorderType = BORDER16;
+        if (distance > 50) {
+            obj.modelBlueType = SHAPE_BLUE_DISK16;
+            obj.modelPurpleType = SHAPE_PURPLE_DISK16;
+            obj.modelOrangeType = SHAPE_ORANGE_DISK16;
+            obj.modelCyanType = SHAPE_CYAN_DISK16;
+
+            obj.modelSelectBlueType = SHAPE_SELECT_BLUE_DISK16;
+            obj.modelSelectPurpleType = SHAPE_SELECT_PURPLE_DISK16;
+            obj.modelSelectOrangeType = SHAPE_SELECT_ORANGE_DISK16;
+            obj.modelSelectCyanType = SHAPE_SELECT_CYAN_DISK16;
         } else {
-            obj.modelType = SHAPE_DISK32;
-            obj.modelBorderType = BORDER32;
+            obj.modelBlueType = SHAPE_BLUE_DISK32;
+            obj.modelPurpleType = SHAPE_PURPLE_DISK32;
+            obj.modelOrangeType = SHAPE_ORANGE_DISK32;
+            obj.modelCyanType = SHAPE_CYAN_DISK32;
+
+            obj.modelSelectBlueType = SHAPE_SELECT_BLUE_DISK32;
+            obj.modelSelectPurpleType = SHAPE_SELECT_PURPLE_DISK32;
+            obj.modelSelectOrangeType = SHAPE_SELECT_ORANGE_DISK32;
+            obj.modelSelectCyanType = SHAPE_SELECT_CYAN_DISK32;
         }
     }
 
     @Override
     public int initDisplayLists(GL2 gl, GLU glu, GLUquadric quadric, int ptr) {
-        // Diamond display list
-        SHAPE_DIAMOND = ptr + 1;
-        gl.glNewList(SHAPE_DIAMOND, GL2.GL_COMPILE);
-        glu.gluDisk(quadric, 0, 0.5, 4, 1);
-        gl.glEndList();
-        //End
 
-        //Disk16
-        SHAPE_DISK16 = SHAPE_DIAMOND + 1;
-        gl.glNewList(SHAPE_DISK16, GL2.GL_COMPILE);
-        glu.gluDisk(quadric, 0, 0.5, 6, 1);
+        //Blue Disk16
+        SHAPE_BLUE_DISK16 = ptr + 1;
+        gl.glNewList(SHAPE_BLUE_DISK16, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.541f, 0.651f, 0.902f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+        gl.glColor3f(0.9f, 0.9f, 0.9f);        
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+//        glu.gluDisk(quadric, 0, 0.5, 6, 1);
         gl.glEndList();
         //Fin
 
-        //Disk32
-        SHAPE_DISK32 = SHAPE_DISK16 + 1;
-        gl.glNewList(SHAPE_DISK32, GL2.GL_COMPILE);
-        glu.gluDisk(quadric, 0, 0.5, 12, 2);
+        //Blue Disk32
+        SHAPE_BLUE_DISK32 = SHAPE_BLUE_DISK16 + 1;
+        gl.glNewList(SHAPE_BLUE_DISK32, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.541f, 0.651f, 0.902f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+        gl.glColor3f(0.9f, 0.9f, 0.9f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+//        glu.gluDisk(quadric, 0, 0.5, 12, 2);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
         gl.glEndList();
 
-        //Disk64
-        SHAPE_DISK64 = SHAPE_DISK32 + 1;
-        gl.glNewList(SHAPE_DISK64, GL2.GL_COMPILE);
-        glu.gluDisk(quadric, 0, 0.5, 32, 4);
+        //Blue Disk64
+        SHAPE_BLUE_DISK64 = SHAPE_BLUE_DISK32 + 1;
+        gl.glNewList(SHAPE_BLUE_DISK64, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.541f, 0.651f, 0.902f);
+        glu.gluDisk(quadric, 0, 2.5, 24, 1);
+        gl.glColor3f(0.9f, 0.9f, 0.9f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 24, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 24, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
         gl.glEndList();
 
-        //Border16
-        BORDER16 = SHAPE_DISK64 + 1;
-        gl.glNewList(BORDER16, GL2.GL_COMPILE);
-        glu.gluDisk(quadric, 0.42, 0.50, 24, 2);
+        //PURPLE Disk16
+        SHAPE_PURPLE_DISK16 = SHAPE_BLUE_DISK64 + 1;
+        gl.glNewList(SHAPE_PURPLE_DISK16, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.737f, 0.541f, 0.902f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+        gl.glColor3f(0.9f, 0.9f, 0.9f);        
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+//        glu.gluDisk(quadric, 0, 0.5, 6, 1);
+        gl.glEndList();
+        //Fin
+
+        //PURPLE Disk32
+        SHAPE_PURPLE_DISK32 = SHAPE_PURPLE_DISK16 + 1;
+        gl.glNewList(SHAPE_PURPLE_DISK32, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.737f, 0.541f, 0.902f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+        gl.glColor3f(0.9f, 0.9f, 0.9f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+//        glu.gluDisk(quadric, 0, 0.5, 12, 2);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
         gl.glEndList();
 
-        //Border32
-        BORDER32 = BORDER16 + 1;
-        gl.glNewList(BORDER32, GL2.GL_COMPILE);
-        glu.gluDisk(quadric, 0.42, 0.50, 48, 2);
+        //PURPLE Disk64
+        SHAPE_PURPLE_DISK64 = SHAPE_PURPLE_DISK32 + 1;
+        gl.glNewList(SHAPE_PURPLE_DISK64, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.737f, 0.541f, 0.902f);
+        glu.gluDisk(quadric, 0, 2.5, 24, 1);
+        gl.glColor3f(0.9f, 0.9f, 0.9f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 24, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 24, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+        gl.glEndList();
+        
+        //ORANGE Disk16
+        SHAPE_ORANGE_DISK16 = SHAPE_PURPLE_DISK64 + 1;
+        gl.glNewList(SHAPE_ORANGE_DISK16, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.902f, 0.667f, 0.541f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+        gl.glColor3f(0.9f, 0.9f, 0.9f);        
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+//        glu.gluDisk(quadric, 0, 0.5, 6, 1);
+        gl.glEndList();
+        //Fin
+
+        //ORANGE Disk32
+        SHAPE_ORANGE_DISK32 = SHAPE_ORANGE_DISK16 + 1;
+        gl.glNewList(SHAPE_ORANGE_DISK32, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.902f, 0.667f, 0.541f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+        gl.glColor3f(0.9f, 0.9f, 0.9f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+//        glu.gluDisk(quadric, 0, 0.5, 12, 2);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
         gl.glEndList();
 
-        //Border32
-        BORDER64 = BORDER32 + 1;
-        gl.glNewList(BORDER64, GL2.GL_COMPILE);
-        glu.gluDisk(quadric, 0.42, 0.50, 96, 4);
+        //ORANGE Disk64
+        SHAPE_ORANGE_DISK64 = SHAPE_ORANGE_DISK32 + 1;
+        gl.glNewList(SHAPE_ORANGE_DISK64, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.902f, 0.667f, 0.541f);
+        glu.gluDisk(quadric, 0, 2.5, 24, 1);
+        gl.glColor3f(0.9f, 0.9f, 0.9f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 24, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 24, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+        gl.glEndList();
+        
+        //CYAN Disk16
+        SHAPE_CYAN_DISK16 = SHAPE_ORANGE_DISK64 + 1;
+        gl.glNewList(SHAPE_CYAN_DISK16, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.541f, 0.804f, 0.902f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+        gl.glColor3f(0.9f, 0.9f, 0.9f);        
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+//        glu.gluDisk(quadric, 0, 0.5, 6, 1);
+        gl.glEndList();
+        //Fin
+
+        //CYAN Disk32
+        SHAPE_CYAN_DISK32 = SHAPE_CYAN_DISK16 + 1;
+        gl.glNewList(SHAPE_CYAN_DISK32, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.541f, 0.804f, 0.902f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+        gl.glColor3f(0.9f, 0.9f, 0.9f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+//        glu.gluDisk(quadric, 0, 0.5, 12, 2);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
         gl.glEndList();
 
-        return BORDER64;
+        //CYAN Disk64
+        SHAPE_CYAN_DISK64 = SHAPE_CYAN_DISK32 + 1;
+        gl.glNewList(SHAPE_CYAN_DISK64, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.541f, 0.804f, 0.902f);
+        glu.gluDisk(quadric, 0, 2.5, 24, 1);
+        gl.glColor3f(0.9f, 0.9f, 0.9f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 24, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 24, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+        gl.glEndList();
+
+        //***************
+        //SELECTED SHAPES
+        //***************
+        //Blue Disk16
+        SHAPE_SELECT_BLUE_DISK16 = SHAPE_CYAN_DISK64 + 1;
+        gl.glNewList(SHAPE_SELECT_BLUE_DISK16, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.541f, 0.651f, 0.902f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+        gl.glColor3f(0.749f, 0.925f, 1.0f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+//        glu.gluDisk(quadric, 0, 0.5, 6, 1);
+        gl.glEndList();
+        //Fin
+
+        //Blue Disk32
+        SHAPE_SELECT_BLUE_DISK32 = SHAPE_SELECT_BLUE_DISK16 + 1;
+        gl.glNewList(SHAPE_SELECT_BLUE_DISK32, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.541f, 0.651f, 0.902f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+        gl.glColor3f(0.749f, 0.925f, 1.0f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+//        glu.gluDisk(quadric, 0, 0.5, 12, 2);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+        gl.glEndList();
+
+        //Blue Disk64
+        SHAPE_SELECT_BLUE_DISK64 = SHAPE_SELECT_BLUE_DISK32 + 1;
+        gl.glNewList(SHAPE_SELECT_BLUE_DISK64, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.541f, 0.651f, 0.902f);
+        glu.gluDisk(quadric, 0, 2.5, 24, 1);
+        gl.glColor3f(0.749f, 0.925f, 1.0f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 24, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 24, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+        gl.glEndList();
+
+        //PURPLE Disk16
+        SHAPE_SELECT_PURPLE_DISK16 = SHAPE_SELECT_BLUE_DISK64 + 1;
+        gl.glNewList(SHAPE_SELECT_PURPLE_DISK16, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.737f, 0.541f, 0.902f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+        gl.glColor3f(0.749f, 0.925f, 1.0f);    
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+//        glu.gluDisk(quadric, 0, 0.5, 6, 1);
+        gl.glEndList();
+        //Fin
+
+        //PURPLE Disk32
+        SHAPE_SELECT_PURPLE_DISK32 = SHAPE_SELECT_PURPLE_DISK16 + 1;
+        gl.glNewList(SHAPE_SELECT_PURPLE_DISK32, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.737f, 0.541f, 0.902f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+        gl.glColor3f(0.749f, 0.925f, 1.0f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+//        glu.gluDisk(quadric, 0, 0.5, 12, 2);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+        gl.glEndList();
+
+        //PURPLE Disk64
+        SHAPE_SELECT_PURPLE_DISK64 = SHAPE_SELECT_PURPLE_DISK32 + 1;
+        gl.glNewList(SHAPE_SELECT_PURPLE_DISK64, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.737f, 0.541f, 0.902f);
+        glu.gluDisk(quadric, 0, 2.5, 24, 1);
+        gl.glColor3f(0.749f, 0.925f, 1.0f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 24, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 24, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+        gl.glEndList();
+        
+        //ORANGE Disk16
+        SHAPE_SELECT_ORANGE_DISK16 = SHAPE_SELECT_PURPLE_DISK64 + 1;
+        gl.glNewList(SHAPE_SELECT_ORANGE_DISK16, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.902f, 0.667f, 0.541f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+       gl.glColor3f(0.749f, 0.925f, 1.0f); 
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+//        glu.gluDisk(quadric, 0, 0.5, 6, 1);
+        gl.glEndList();
+        //Fin
+
+        //ORANGE Disk32
+        SHAPE_SELECT_ORANGE_DISK32 = SHAPE_SELECT_ORANGE_DISK16 + 1;
+        gl.glNewList(SHAPE_SELECT_ORANGE_DISK32, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.902f, 0.667f, 0.541f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+        gl.glColor3f(0.749f, 0.925f, 1.0f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+//        glu.gluDisk(quadric, 0, 0.5, 12, 2);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+        gl.glEndList();
+
+        //ORANGE Disk64
+        SHAPE_SELECT_ORANGE_DISK64 = SHAPE_SELECT_ORANGE_DISK32 + 1;
+        gl.glNewList(SHAPE_SELECT_ORANGE_DISK64, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.902f, 0.667f, 0.541f);
+        glu.gluDisk(quadric, 0, 2.5, 24, 1);
+        gl.glColor3f(0.749f, 0.925f, 1.0f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 24, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 24, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+        gl.glEndList();
+        
+        //CYAN Disk16
+        SHAPE_SELECT_CYAN_DISK16 = SHAPE_SELECT_ORANGE_DISK64 + 1;
+        gl.glNewList(SHAPE_SELECT_CYAN_DISK16, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.541f, 0.804f, 0.902f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+        gl.glColor3f(0.749f, 0.925f, 1.0f);      
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+//        glu.gluDisk(quadric, 0, 0.5, 6, 1);
+        gl.glEndList();
+        //Fin
+
+        //CYAN Disk32
+        SHAPE_SELECT_CYAN_DISK32 = SHAPE_SELECT_CYAN_DISK16 + 1;
+        gl.glNewList(SHAPE_SELECT_CYAN_DISK32, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.541f, 0.804f, 0.902f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, -180);
+        gl.glColor3f(0.749f, 0.925f, 1.0f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 12, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 12, 1, 0, 180);
+//        glu.gluDisk(quadric, 0, 0.5, 12, 2);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+        gl.glEndList();
+
+        //CYAN Disk64
+        SHAPE_SELECT_CYAN_DISK64 = SHAPE_SELECT_CYAN_DISK32 + 1;
+        gl.glNewList(SHAPE_SELECT_CYAN_DISK64, GL2.GL_COMPILE);
+        gl.glTranslatef(-6.25f,0.0f,0.0f);
+        gl.glColor3f(0.541f, 0.804f, 0.902f);
+        glu.gluDisk(quadric, 0, 2.5, 24, 1);
+        gl.glColor3f(0.749f, 0.925f, 1.0f);
+        gl.glBegin(GL_POLYGON);
+        gl.glVertex2f(0.0f, 2.5f);
+        gl.glVertex2f(0.0f, -2.5f);
+        gl.glVertex2f(10.0f, -2.5f);
+        gl.glVertex2f(10.0f, 2.5f);
+        gl.glEnd();
+        gl.glTranslatef(-1.0f,0.75f,0.0f);
+        glu.gluDisk(quadric, 0, 0.5, 12, 1);
+        gl.glTranslatef(0.0f,-1.5f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 0.75, 24, 1, 90, -180);
+        gl.glTranslatef(11.0f,0.75f,0.0f);
+        glu.gluPartialDisk(quadric, 0, 2.5, 24, 1, 0, 180);
+        gl.glTranslatef(-3.75f,0.0f,0.0f);
+        gl.glEndList();
+
+        return SHAPE_SELECT_CYAN_DISK64;
     }
 
     @Override

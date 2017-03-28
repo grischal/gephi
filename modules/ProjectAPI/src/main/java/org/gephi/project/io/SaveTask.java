@@ -124,7 +124,7 @@ public class SaveTask implements LongTask, Runnable {
                     Progress.progress(progressTicket);
 
                     for (WorkspacePersistenceProvider provider : providers) {
-                        if (provider instanceof WorkspaceXMLPersistenceProvider) {
+                        if (provider instanceof WorkspaceXMLPersistenceProvider) { 
                             writeWorkspaceChildrenXML(ws, (WorkspaceXMLPersistenceProvider) provider, dos, zipOut);
                         } else if (provider instanceof WorkspaceBytesPersistenceProvider) {
                             writeWorkspaceChildrenBytes(ws, (WorkspaceBytesPersistenceProvider) provider, dos, zipOut);

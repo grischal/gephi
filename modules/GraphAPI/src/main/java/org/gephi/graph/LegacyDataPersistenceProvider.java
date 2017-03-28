@@ -62,6 +62,7 @@ public class LegacyDataPersistenceProvider implements WorkspaceXMLPersistencePro
     private static final String ELEMENT_NODEDATA_POSITION = "position";
     private static final String ELEMENT_NODEDATA_COLOR = "color";
     private static final String ELEMENT_NODEDATA_SIZE = "size";
+    private static final String ELEMENT_NODEDATA_ROLE = "role";
     private static final String ELEMENT_EDGEDATA = "edgedata";
     private static final String ELEMENT_EDGEDATA_COLOR = "color";
 
@@ -134,6 +135,8 @@ public class LegacyDataPersistenceProvider implements WorkspaceXMLPersistencePro
                     node.setAlpha(Float.parseFloat(reader.getAttributeValue(null, "a")));
                 } else if (ELEMENT_NODEDATA_SIZE.equalsIgnoreCase(name)) {
                     node.setSize(Float.parseFloat(reader.getAttributeValue(0)));
+                } else if (ELEMENT_NODEDATA_ROLE.equalsIgnoreCase(name)) {
+                    node.setRole(Integer.parseInt(reader.getAttributeValue(0)));
                 }
             } else if (eventType.equals(XMLStreamReader.END_ELEMENT)) {
                 if (ELEMENT_NODEDATA.equalsIgnoreCase(reader.getLocalName())) {

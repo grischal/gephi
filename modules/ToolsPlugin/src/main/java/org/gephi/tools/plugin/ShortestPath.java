@@ -68,143 +68,143 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author Mathieu Bastian
  */
-@ServiceProvider(service = Tool.class)
-public class ShortestPath implements Tool {
-
-    //Architecture
-    private ToolEventListener[] listeners;
-    private ShortestPathPanel shortestPathPanel;
-    //Settings
-    private Color color;
-    private boolean settingEdgeSourceColor;
-    //State
-    private Node sourceNode;
-
-    public ShortestPath() {
-        //Default settings
-        color = Color.RED;
-    }
-
-    @Override
-    public void select() {
-        settingEdgeSourceColor = !VizController.getInstance().getVizModel().isEdgeHasUniColor();
-        VizController.getInstance().getVizModel().setEdgeHasUniColor(true);
-        VizController.getInstance().getVizConfig().setEnableAutoSelect(false);
-    }
-
-    @Override
-    public void unselect() {
-        listeners = null;
-        sourceNode = null;
-        shortestPathPanel = null;
-        VizController.getInstance().getVizModel().setEdgeHasUniColor(settingEdgeSourceColor);
-        VizController.getInstance().getVizConfig().setEnableAutoSelect(true);
-    }
-
-    @Override
-    public ToolEventListener[] getListeners() {
-        listeners = new ToolEventListener[2];
-        listeners[0] = new NodeClickEventListener() {
-            @Override
-            public void clickNodes(Node[] nodes) {
-                Node n = nodes[0];
-                if (sourceNode == null) {
-                    sourceNode = n;
-                    shortestPathPanel.setResult("");
-                    shortestPathPanel.setStatus(NbBundle.getMessage(ShortestPath.class, "ShortestPath.status2"));
-                } else if (n != sourceNode) {
-                    color = shortestPathPanel.getColor();
-                    Node targetNode = n;
-                    GraphController gc = Lookup.getDefault().lookup(GraphController.class);
-                    GraphModel gm = gc.getGraphModel();
-
-                    AbstractShortestPathAlgorithm algorithm;
-                    if (gm.isDirected()) {
-                        algorithm = new BellmanFordShortestPathAlgorithm(gm.getDirectedGraphVisible(), sourceNode);
-                    } else {
-                        algorithm = new DijkstraShortestPathAlgorithm(gm.getGraphVisible(), sourceNode);
-                    }
-                    algorithm.compute();
-
-                    double distance;
-                    if ((distance = algorithm.getDistances().get(targetNode)) != Double.POSITIVE_INFINITY) {
-                        targetNode.setColor(color);
-                        VizController.getInstance().selectNode(targetNode);
-                        Edge predecessorEdge = algorithm.getPredecessorIncoming(targetNode);
-                        Node predecessor = algorithm.getPredecessor(targetNode);
-                        while (predecessorEdge != null && predecessor != sourceNode) {
-                            predecessorEdge.setColor(color);
-                            VizController.getInstance().selectEdge(predecessorEdge);
-                            predecessor.setColor(color);
-                            VizController.getInstance().selectNode(predecessor);
-                            predecessorEdge = algorithm.getPredecessorIncoming(predecessor);
-                            predecessor = algorithm.getPredecessor(predecessor);
-                        }
-                        predecessorEdge.setColor(color);
-                        VizController.getInstance().selectEdge(predecessorEdge);
-                        sourceNode.setColor(color);
-                        VizController.getInstance().selectNode(sourceNode);
-                        shortestPathPanel.setResult(NbBundle.getMessage(ShortestPath.class, "ShortestPath.result", distance));
-                    } else {
-                        //No path
-                        shortestPathPanel.setResult(NbBundle.getMessage(ShortestPath.class, "ShortestPath.noresult"));
-                    }
-
-                    sourceNode = null;
-                    shortestPathPanel.setStatus(NbBundle.getMessage(ShortestPath.class, "ShortestPath.status1"));
-                }
-            }
-        };
-        listeners[1] = new MouseClickEventListener() {
-            @Override
-            public void mouseClick(int[] positionViewport, float[] position3d) {
-                if (sourceNode != null) {
-                    //Cancel
-                    shortestPathPanel.setStatus(NbBundle.getMessage(ShortestPath.class, "ShortestPath.status1"));
-                    sourceNode = null;
-                } else {
-                    VizController.getInstance().resetSelection();
-                }
-            }
-        };
-        return listeners;
-    }
-
-    @Override
-    public ToolUI getUI() {
-        return new ToolUI() {
-            @Override
-            public JPanel getPropertiesBar(Tool tool) {
-                shortestPathPanel = new ShortestPathPanel();
-                shortestPathPanel.setColor(color);
-                shortestPathPanel.setStatus(NbBundle.getMessage(ShortestPath.class, "ShortestPath.status1"));
-                return shortestPathPanel;
-            }
-
-            @Override
-            public String getName() {
-                return NbBundle.getMessage(ShortestPath.class, "ShortestPath.name");
-            }
-
-            @Override
-            public Icon getIcon() {
-                return new ImageIcon(getClass().getResource("/org/gephi/tools/plugin/resources/shortestpath.png"));
-            }
-
-            @Override
-            public String getDescription() {
-                return NbBundle.getMessage(ShortestPath.class, "ShortestPath.description");
-            }
-
-            @Override
-            public int getPosition() {
-                return 140;
-            }
-        };
-    }
-
-    @Override
-    public ToolSelectionType getSelectionType() {
-        return ToolSelectionType.SELECTION;
-    }
+//@ServiceProvider(service = Tool.class)
+public class ShortestPath{// implements Tool {
+//
+//    //Architecture
+//    private ToolEventListener[] listeners;
+//    private ShortestPathPanel shortestPathPanel;
+//    //Settings
+//    private Color color;
+//    private boolean settingEdgeSourceColor;
+//    //State
+//    private Node sourceNode;
+//
+//    public ShortestPath() {
+//        //Default settings
+//        color = Color.RED;
+//    }
+//
+//    @Override
+//    public void select() {
+//        settingEdgeSourceColor = !VizController.getInstance().getVizModel().isEdgeHasUniColor();
+//        VizController.getInstance().getVizModel().setEdgeHasUniColor(true);
+//        VizController.getInstance().getVizConfig().setEnableAutoSelect(false);
+//    }
+//
+//    @Override
+//    public void unselect() {
+//        listeners = null;
+//        sourceNode = null;
+//        shortestPathPanel = null;
+//        VizController.getInstance().getVizModel().setEdgeHasUniColor(settingEdgeSourceColor);
+//        VizController.getInstance().getVizConfig().setEnableAutoSelect(true);
+//    }
+//
+//    @Override
+//    public ToolEventListener[] getListeners() {
+//        listeners = new ToolEventListener[2];
+//        listeners[0] = new NodeClickEventListener() {
+//            @Override
+//            public void clickNodes(Node[] nodes) {
+//                Node n = nodes[0];
+//                if (sourceNode == null) {
+//                    sourceNode = n;
+//                    shortestPathPanel.setResult("");
+//                    shortestPathPanel.setStatus(NbBundle.getMessage(ShortestPath.class, "ShortestPath.status2"));
+//                } else if (n != sourceNode) {
+//                    color = shortestPathPanel.getColor();
+//                    Node targetNode = n;
+//                    GraphController gc = Lookup.getDefault().lookup(GraphController.class);
+//                    GraphModel gm = gc.getGraphModel();
+//
+//                    AbstractShortestPathAlgorithm algorithm;
+//                    if (gm.isDirected()) {
+//                        algorithm = new BellmanFordShortestPathAlgorithm(gm.getDirectedGraphVisible(), sourceNode);
+//                    } else {
+//                        algorithm = new DijkstraShortestPathAlgorithm(gm.getGraphVisible(), sourceNode);
+//                    }
+//                    algorithm.compute();
+//
+//                    double distance;
+//                    if ((distance = algorithm.getDistances().get(targetNode)) != Double.POSITIVE_INFINITY) {
+//                        targetNode.setColor(color);
+//                        VizController.getInstance().selectNode(targetNode);
+//                        Edge predecessorEdge = algorithm.getPredecessorIncoming(targetNode);
+//                        Node predecessor = algorithm.getPredecessor(targetNode);
+//                        while (predecessorEdge != null && predecessor != sourceNode) {
+//                            predecessorEdge.setColor(color);
+//                            VizController.getInstance().selectEdge(predecessorEdge);
+//                            predecessor.setColor(color);
+//                            VizController.getInstance().selectNode(predecessor);
+//                            predecessorEdge = algorithm.getPredecessorIncoming(predecessor);
+//                            predecessor = algorithm.getPredecessor(predecessor);
+//                        }
+//                        predecessorEdge.setColor(color);
+//                        VizController.getInstance().selectEdge(predecessorEdge);
+//                        sourceNode.setColor(color);
+//                        VizController.getInstance().selectNode(sourceNode);
+//                        shortestPathPanel.setResult(NbBundle.getMessage(ShortestPath.class, "ShortestPath.result", distance));
+//                    } else {
+//                        //No path
+//                        shortestPathPanel.setResult(NbBundle.getMessage(ShortestPath.class, "ShortestPath.noresult"));
+//                    }
+//
+//                    sourceNode = null;
+//                    shortestPathPanel.setStatus(NbBundle.getMessage(ShortestPath.class, "ShortestPath.status1"));
+//                }
+//            }
+//        };
+//        listeners[1] = new MouseClickEventListener() {
+//            @Override
+//            public void mouseClick(int[] positionViewport, float[] position3d) {
+//                if (sourceNode != null) {
+//                    //Cancel
+//                    shortestPathPanel.setStatus(NbBundle.getMessage(ShortestPath.class, "ShortestPath.status1"));
+//                    sourceNode = null;
+//                } else {
+//                    VizController.getInstance().resetSelection();
+//                }
+//            }
+//        };
+//        return listeners;
+//    }
+//
+//    @Override
+//    public ToolUI getUI() {
+//        return new ToolUI() {
+//            @Override
+//            public JPanel getPropertiesBar(Tool tool) {
+//                shortestPathPanel = new ShortestPathPanel();
+//                shortestPathPanel.setColor(color);
+//                shortestPathPanel.setStatus(NbBundle.getMessage(ShortestPath.class, "ShortestPath.status1"));
+//                return shortestPathPanel;
+//            }
+//
+//            @Override
+//            public String getName() {
+//                return NbBundle.getMessage(ShortestPath.class, "ShortestPath.name");
+//            }
+//
+//            @Override
+//            public Icon getIcon() {
+//                return new ImageIcon(getClass().getResource("/org/gephi/tools/plugin/resources/shortestpath.png"));
+//            }
+//
+//            @Override
+//            public String getDescription() {
+//                return NbBundle.getMessage(ShortestPath.class, "ShortestPath.description");
+//            }
+//
+//            @Override
+//            public int getPosition() {
+//                return 140;
+//            }
+//        };
+//    }
+//
+//    @Override
+//    public ToolSelectionType getSelectionType() {
+//        return ToolSelectionType.SELECTION;
+//    }
 }

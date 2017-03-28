@@ -108,7 +108,7 @@ public class VizConfig {
     public static final String DISABLE_LOD = "VizConfig.disableLOD";
     //Default values
     public static final Color DEFAULT_BACKGROUND_COLOR = Color.WHITE;
-    public static final boolean DEFAULT_NODE_LABELS = false;
+    public static final boolean DEFAULT_NODE_LABELS = true;
     public static final boolean DEFAULT_EDGE_LABELS = false;
     public static final boolean DEFAULT_SHOW_EDGES = true;
     public static final boolean DEFAULT_HIGHLIGHT = true;
@@ -153,7 +153,7 @@ public class VizConfig {
     public static final boolean DEFAULT_CONTEXT_MENU = true;
     public static final boolean DEFAULT_TOOLBAR = true;
     public static final boolean DEFAULT_PROPERTIESBAR = true;
-    public static final int DEFAULT_MOUSE_SELECTION_DIAMETER = 1;
+    public static final int DEFAULT_MOUSE_SELECTION_DIAMETER = 20;
     public static final boolean DEFAULT_MOUSE_SELECTION_ZOOM_PROPORTIONAL = false;
     public static final boolean DEFAULT_MOUSE_SELECTION_WHILE_DRAGGING = false;
     public static final boolean DEFAULT_DISABLE_LOD = false;

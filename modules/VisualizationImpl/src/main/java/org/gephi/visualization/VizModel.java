@@ -54,6 +54,7 @@ import javax.xml.stream.XMLStreamWriter;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.types.IntervalStringMap;
 import org.gephi.project.api.Workspace;
 import org.gephi.ui.utils.ColorUtils;
 import org.gephi.visualization.apiimpl.GraphDrawable;
@@ -94,7 +95,6 @@ public class VizModel {
     public VizModel(Workspace workspace) {
         defaultValues();
         limits = VizController.getInstance().getLimits();
-
         GraphModel gm = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspace);
         textModel.setTextColumns(new Column[]{gm.getNodeTable().getColumn("label")}, new Column[]{gm.getEdgeTable().getColumn("label")});
     }

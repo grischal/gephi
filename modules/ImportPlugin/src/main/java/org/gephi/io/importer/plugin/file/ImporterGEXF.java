@@ -88,6 +88,7 @@ public class ImporterGEXF implements FileImporter, LongTask {
     private static final String NODE_POSITION = "position";
     private static final String NODE_COLOR = "color";
     private static final String NODE_SIZE = "size";
+    private static final String NODE_ROLE = "role";
     private static final String NODE_SPELL = "slice"; // GEXF 1.1
     private static final String NODE_SPELL2 = "spell";
     private static final String EDGE = "edge";
@@ -390,6 +391,8 @@ public class ImporterGEXF implements FileImporter, LongTask {
                         readElementColor(reader, node);
                     } else if (NODE_SIZE.equalsIgnoreCase(name)) {
                         readNodeSize(reader, node);
+                    } else if (NODE_ROLE.equalsIgnoreCase(name)) {
+                        readNodeRole(reader, node);
                     } else if (NODE_SPELL.equalsIgnoreCase(name) || NODE_SPELL2.equalsIgnoreCase(name)) {
                         readElementSpell(reader, node);
                         spells = true;
@@ -639,6 +642,21 @@ public class ImporterGEXF implements FileImporter, LongTask {
                     node.setSize(size);
                 } catch (NumberFormatException e) {
                     report.logIssue(new Issue(NbBundle.getMessage(ImporterGEXF.class, "importerGEXF_error_nodesize", node), Issue.Level.WARNING));
+                }
+            }
+        }
+    }
+    
+    private void readNodeRole(XMLStreamReader reader, NodeDraft node) throws Exception {
+        String attName = reader.getAttributeName(0).getLocalPart();
+        if ("value".equalsIgnoreCase(attName)) {
+            String roleStr = reader.getAttributeValue(0);
+            if (!roleStr.isEmpty()) {
+                try {
+                    int role = Integer.parseInt(roleStr);
+                    node.setRole(role);
+                } catch (NumberFormatException e) {
+                    report.logIssue(new Issue(NbBundle.getMessage(ImporterGEXF.class, "importerGEXF_error_noderole", node), Issue.Level.WARNING));
                 }
             }
         }

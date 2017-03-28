@@ -49,24 +49,24 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
- * @author Mathieu Bastian
+ * @author Grischa Liebel
  */
 @ServiceProvider(service = GraphFileExporterBuilder.class)
-public class ExporterBuilderGEXF implements GraphFileExporterBuilder {
+public class ExporterBuilderLoCoGEXF implements GraphFileExporterBuilder {
 
     @Override
     public GraphExporter buildExporter() {
-        return new ExporterGEXF();
+        return new ExporterLoCoGEXF();
     }
 
     @Override
     public FileType[] getFileTypes() {
-        FileType ft = new FileType(".gexf", NbBundle.getMessage(ExporterBuilderGEXF.class, "fileType_GEXF_Name"));
+        FileType ft = new FileType(".gexf", NbBundle.getMessage(ExporterBuilderLoCoGEXF.class, "fileType_LoCo_GEXF_Name"));
         return new FileType[]{ft};
     }
 
     @Override
     public String getName() {
-        return "LoCo GEXF";
+        return "LoCo CoCo GEXF";
     }
 }

@@ -242,12 +242,13 @@ public class Edge2dModel extends EdgeModel {
 
         //
         //Edge size
-        float arrowWidth = ARROW_WIDTH * w * 2f;
-        float arrowHeight = ARROW_HEIGHT * w * 2f;
+        float arrowWidth = ARROW_WIDTH * 10f;
+        float arrowHeight = ARROW_HEIGHT * 2f;
 
-        float x2 = nodeTo.x();
+        //Using actual center, not the text center
+        float x2 = nodeTo.x()-1.25f;
         float y2 = nodeTo.y();
-        float x1 = nodeFrom.x();
+        float x1 = nodeFrom.x()-1.25f;
         float y1 = nodeFrom.y();
 
         //Edge vector
@@ -263,8 +264,8 @@ public class Edge2dModel extends EdgeModel {
         float targetY = y2 - edgeVector.y() * collisionDistance;
 
         //Base of the arrow
-        float baseX = targetX - edgeVector.x() * arrowHeight * 2f;
-        float baseY = targetY - edgeVector.y() * arrowHeight * 2f;
+        float baseX = targetX - edgeVector.x() * arrowHeight * 20f;
+        float baseY = targetY - edgeVector.y() * arrowHeight * 20f;
 
         //Side vector
         float sideVectorX = y1 - y2;
@@ -272,6 +273,15 @@ public class Edge2dModel extends EdgeModel {
         float norm = (float) Math.sqrt(sideVectorX * sideVectorX + sideVectorY * sideVectorY);
         sideVectorX /= norm;
         sideVectorY /= norm;
+        
+//        System.out.println("From: " + x1 + "," + y1);
+//        System.out.println("To: " + x2 + "," + y2);
+//        System.out.println("Angle: " + angle);
+//        System.out.println("Coll Distance: " + collisionDistance);
+//        System.out.println("Target: " + targetX + "," + targetY);
+//        System.out.println("Base: " + baseX + "," + baseY);
+//        System.out.println("Side: " + sideVectorX + "," + sideVectorY);
+        
 
         //Color
         gl.glColor4f(color[0], color[1], color[2], color[3]);

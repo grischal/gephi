@@ -49,8 +49,14 @@ import org.gephi.visualization.VizModel;
 
 public class NodeDiskModel extends NodeModel {
 
-    public int modelType;
-    public int modelBorderType;
+    public int modelBlueType;
+    public int modelPurpleType;
+    public int modelOrangeType;
+    public int modelCyanType;
+    public int modelSelectBlueType;
+    public int modelSelectPurpleType;
+    public int modelSelectOrangeType;
+    public int modelSelectCyanType;
 
     public NodeDiskModel(Node node) {
         super(node);
@@ -71,72 +77,29 @@ public class NodeDiskModel extends NodeModel {
         float size = node.size() * 2;
         gl.glTranslatef(node.x(), node.y(), node.z());
         gl.glScalef(size, size, 1f);
-
-        if (!selec) {
-            if (vizModel.getConfig().isLightenNonSelected()) {
-                float[] lightColor = vizModel.getConfig().getLightenNonSelectedColor();
-                float lightColorFactor = vizModel.getConfig().getLightenNonSelectedFactor();
-                float r = node.r();
-                float g = node.g();
-                float b = node.b();
-                gl.glColor3f(r + (lightColor[0] - r) * lightColorFactor, g + (lightColor[1] - g) * lightColorFactor, b + (lightColor[2] - b) * lightColorFactor);
-                gl.glCallList(modelType);
-                if (modelBorderType != 0) {
-                    float rborder = 0.498f * r;
-                    float gborder = 0.498f * g;
-                    float bborder = 0.498f * b;
-                    gl.glColor3f(rborder + (lightColor[0] - rborder) * lightColorFactor, gborder + (lightColor[1] - gborder) * lightColorFactor, bborder + (lightColor[2] - bborder) * lightColorFactor);
-                    gl.glCallList(modelBorderType);
-                }
+        
+        if (selec) {
+            if (node.role() == 2) {
+                gl.glCallList(modelSelectPurpleType);
+            } else if (node.role() == 3) {
+                gl.glCallList(modelSelectOrangeType);
+            } else if (node.role() == 4) {
+                gl.glCallList(modelSelectCyanType);
             } else {
-                float r = node.r();
-                float g = node.g();
-                float b = node.b();
-                gl.glColor3f(r, g, b);
-                gl.glCallList(modelType);
-                if (modelBorderType != 0) {
-                    float rborder = 0.498f * r;
-                    float gborder = 0.498f * g;
-                    float bborder = 0.498f * b;
-                    gl.glColor3f(rborder, gborder, bborder);
-                    gl.glCallList(modelBorderType);
-                }
+                gl.glCallList(modelSelectBlueType);
             }
         } else {
-            float r;
-            float g;
-            float b;
-            float rborder;
-            float gborder;
-            float bborder;
-            if (vizModel.isUniColorSelected()) {
-                if (neighbor) {
-                    r = vizModel.getConfig().getUniColorSelectedNeigborColor()[0];
-                    g = vizModel.getConfig().getUniColorSelectedNeigborColor()[1];
-                    b = vizModel.getConfig().getUniColorSelectedNeigborColor()[2];
-                } else {
-                    r = vizModel.getConfig().getUniColorSelectedColor()[0];
-                    g = vizModel.getConfig().getUniColorSelectedColor()[1];
-                    b = vizModel.getConfig().getUniColorSelectedColor()[2];
-                }
-                rborder = 0.498f * r;
-                gborder = 0.498f * g;
-                bborder = 0.498f * b;
+            if (node.role() == 2) {
+                gl.glCallList(modelPurpleType);
+            } else if (node.role() == 3) {
+                gl.glCallList(modelOrangeType);
+            } else if (node.role() == 4) {
+                gl.glCallList(modelCyanType);
             } else {
-                rborder = node.r();
-                gborder = node.g();
-                bborder = node.b();
-                r = Math.min(1, 0.5f * rborder + 0.5f);
-                g = Math.min(1, 0.5f * gborder + 0.5f);
-                b = Math.min(1, 0.5f * bborder + 0.5f);
-            }
-            gl.glColor3f(r, g, b);
-            gl.glCallList(modelType);
-            if (modelBorderType != 0) {
-                gl.glColor3f(rborder, gborder, bborder);
-                gl.glCallList(modelBorderType);
+                gl.glCallList(modelBlueType);
             }
         }
+        
 
         gl.glPopMatrix();
     }
@@ -148,6 +111,12 @@ public class NodeDiskModel extends NodeModel {
 
     @Override
     public float getCollisionDistance(double angle) {
-        return node.size();
+        float absAngle = (float) Math.abs(angle);
+        
+        if (absAngle < 1.5707f) { 
+            absAngle = 3.1415f - absAngle;
+        }
+        
+        return node.size() * (float)Math.pow(absAngle,2) + (absAngle-1f)*5f;
     }
 }

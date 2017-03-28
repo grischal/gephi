@@ -193,23 +193,29 @@ public class EditNodes extends AbstractNode {
                 p.setDisplayName(NbBundle.getMessage(EditNodes.class, "EditNodes.size.text"));
                 p.setName("size");
                 set.put(p);
+                
+                //Role:
+                p = new PropertySupport.Reflection(nodesWrapper, Integer.class, "getNodesRoles", "setNodesRoles");
+                p.setDisplayName(NbBundle.getMessage(EditNodes.class, "EditNodes.role.text"));
+                p.setName("role");
+                set.put(p);
 
                 //All position coordinates:
                 set.put(buildMultipleNodesGeneralPositionProperty(nodesWrapper, "x"));
                 set.put(buildMultipleNodesGeneralPositionProperty(nodesWrapper, "y"));
                 set.put(buildMultipleNodesGeneralPositionProperty(nodesWrapper, "z"));
 
-                //Color:
-                p = new PropertySupport.Reflection(nodesWrapper, Color.class, "getNodesColor", "setNodesColor");
-                p.setDisplayName(NbBundle.getMessage(EditNodes.class, "EditNodes.color.text"));
-                p.setName("color");
-                set.put(p);
-
-                //Label color:
-                p = new PropertySupport.Reflection(nodesWrapper, Color.class, "getLabelsColor", "setLabelsColor");
-                p.setDisplayName(NbBundle.getMessage(EditNodes.class, "EditNodes.label.color.text"));
-                p.setName("labelcolor");
-                set.put(p);
+//                //Color:
+//                p = new PropertySupport.Reflection(nodesWrapper, Color.class, "getNodesColor", "setNodesColor");
+//                p.setDisplayName(NbBundle.getMessage(EditNodes.class, "EditNodes.color.text"));
+//                p.setName("color");
+//                set.put(p);
+//
+//                //Label color:
+//                p = new PropertySupport.Reflection(nodesWrapper, Color.class, "getLabelsColor", "setLabelsColor");
+//                p.setDisplayName(NbBundle.getMessage(EditNodes.class, "EditNodes.label.color.text"));
+//                p.setName("labelcolor");
+//                set.put(p);
 
                 //Label size:
                 p = new PropertySupport.Reflection(nodesWrapper, Float.class, "getLabelsSize", "setLabelsSize");
@@ -236,18 +242,24 @@ public class EditNodes extends AbstractNode {
                 p.setDisplayName(NbBundle.getMessage(EditNodes.class, "EditNodes.size.text"));
                 p.setName("size");
                 set.put(p);
+                
+                //Role:
+                p = new PropertySupport.Reflection(node, Integer.TYPE, "role", "setRole");
+                p.setDisplayName(NbBundle.getMessage(EditNodes.class, "EditNodes.role.text"));
+                p.setName("role");
+                set.put(p);
 
                 //All position coordinates:
                 set.put(buildGeneralPositionProperty(node, "x"));
                 set.put(buildGeneralPositionProperty(node, "y"));
                 set.put(buildGeneralPositionProperty(node, "z"));
 
-                //Color:
-                SingleNodePropertiesWrapper nodeWrapper = new SingleNodePropertiesWrapper(node);
-                p = new PropertySupport.Reflection(nodeWrapper, Color.class, "getNodeColor", "setNodeColor");
-                p.setDisplayName(NbBundle.getMessage(EditNodes.class, "EditNodes.color.text"));
-                p.setName("color");
-                set.put(p);
+//                //Color:
+//                SingleNodePropertiesWrapper nodeWrapper = new SingleNodePropertiesWrapper(node);
+//                p = new PropertySupport.Reflection(nodeWrapper, Color.class, "getNodeColor", "setNodeColor");
+//                p.setDisplayName(NbBundle.getMessage(EditNodes.class, "EditNodes.color.text"));
+//                p.setName("color");
+//                set.put(p);
 
                 TextProperties textProperties = node.getTextProperties();
 
@@ -257,11 +269,11 @@ public class EditNodes extends AbstractNode {
                 p.setName("labelsize");
                 set.put(p);
 
-                //Label color:
-                p = new PropertySupport.Reflection(nodeWrapper, Color.class, "getLabelColor", "setLabelColor");
-                p.setDisplayName(NbBundle.getMessage(EditNodes.class, "EditNodes.label.color.text"));
-                p.setName("labelcolor");
-                set.put(p);
+//                //Label color:
+//                p = new PropertySupport.Reflection(nodeWrapper, Color.class, "getLabelColor", "setLabelColor");
+//                p.setDisplayName(NbBundle.getMessage(EditNodes.class, "EditNodes.label.color.text"));
+//                p.setName("labelcolor");
+//                set.put(p);
 
                 //Label visible:
                 p = new PropertySupport.Reflection(textProperties, Boolean.TYPE, "isVisible", "setVisible");
@@ -285,34 +297,34 @@ public class EditNodes extends AbstractNode {
             this.node = node;
         }
 
-        public Color getNodeColor() {
-            return new Color(node.r(), node.g(), node.b(), node.alpha());
-        }
-
-        public void setNodeColor(Color c) {
-            if (c != null) {
-                node.setR(c.getRed() / 255f);
-                node.setG(c.getGreen() / 255f);
-                node.setB(c.getBlue() / 255f);
-                node.setAlpha(c.getAlpha() / 255f);
-            }
-        }
-
-        public Color getLabelColor() {
-            TextProperties textProps = node.getTextProperties();
-            if (textProps.getAlpha() == 0) {
-                return null;//Not specific color for label
-            }
-
-            return textProps.getColor();
-        }
-
-        public void setLabelColor(Color c) {
-            if (c != null) {
-                TextProperties textProps = node.getTextProperties();
-                textProps.setColor(c);
-            }
-        }
+//        public Color getNodeColor() {
+//            return new Color(node.r(), node.g(), node.b(), node.alpha());
+//        }
+//
+//        public void setNodeColor(Color c) {
+//            if (c != null) {
+//                node.setR(c.getRed() / 255f);
+//                node.setG(c.getGreen() / 255f);
+//                node.setB(c.getBlue() / 255f);
+//                node.setAlpha(c.getAlpha() / 255f);
+//            }
+//        }
+//
+//        public Color getLabelColor() {
+//            TextProperties textProps = node.getTextProperties();
+//            if (textProps.getAlpha() == 0) {
+//                return null;//Not specific color for label
+//            }
+//
+//            return textProps.getColor();
+//        }
+//
+//        public void setLabelColor(Color c) {
+//            if (c != null) {
+//                TextProperties textProps = node.getTextProperties();
+//                textProps.setColor(c);
+//            }
+//        }
     }
 
     public class MultipleNodesPropertiesWrapper {
@@ -327,6 +339,7 @@ public class EditNodes extends AbstractNode {
         private Float nodesY = null;
         private Float nodesZ = null;
         private Float nodesSize = null;
+        private Integer roles = null;
         private Color nodesColor = null;
         private Color labelsColor = null;
         private Float labelsSize = null;
@@ -364,22 +377,33 @@ public class EditNodes extends AbstractNode {
                 node.setZ(z);
             }
         }
-
-        public Color getNodesColor() {
-            return nodesColor;
+        
+        public Integer getNodesRoles() {
+            return roles;
         }
-
-        public void setNodesColor(Color c) {
-            if (c != null) {
-                nodesColor = c;
-                for (Node node : nodes) {
-                    node.setR(c.getRed() / 255f);
-                    node.setG(c.getGreen() / 255f);
-                    node.setB(c.getBlue() / 255f);
-                    node.setAlpha(c.getAlpha() / 255f);
-                }
+        
+         public void setNodesRoles(Integer roles) {
+            this.roles = roles;
+            for (Node node : nodes) {
+                node.setRole(roles);
             }
         }
+
+//        public Color getNodesColor() {
+//            return nodesColor;
+//        }
+//
+//        public void setNodesColor(Color c) {
+//            if (c != null) {
+//                nodesColor = c;
+//                for (Node node : nodes) {
+//                    node.setR(c.getRed() / 255f);
+//                    node.setG(c.getGreen() / 255f);
+//                    node.setB(c.getBlue() / 255f);
+//                    node.setAlpha(c.getAlpha() / 255f);
+//                }
+//            }
+//        }
 
         public Float getNodesSize() {
             return nodesSize;
@@ -392,22 +416,22 @@ public class EditNodes extends AbstractNode {
             }
         }
 
-        public Color getLabelsColor() {
-            return labelsColor;
-        }
-
-        public void setLabelsColor(Color c) {
-            if (c != null) {
-                labelsColor = c;
-                for (Node node : nodes) {
-                    TextProperties textProps = node.getTextProperties();
-                    textProps.setR(c.getRed() / 255f);
-                    textProps.setG(c.getGreen() / 255f);
-                    textProps.setB(c.getBlue() / 255f);
-                    textProps.setAlpha(c.getAlpha() / 255f);
-                }
-            }
-        }
+//        public Color getLabelsColor() {
+//            return labelsColor;
+//        }
+//
+//        public void setLabelsColor(Color c) {
+//            if (c != null) {
+//                labelsColor = c;
+//                for (Node node : nodes) {
+//                    TextProperties textProps = node.getTextProperties();
+//                    textProps.setR(c.getRed() / 255f);
+//                    textProps.setG(c.getGreen() / 255f);
+//                    textProps.setB(c.getBlue() / 255f);
+//                    textProps.setAlpha(c.getAlpha() / 255f);
+//                }
+//            }
+//        }
 
         public Float getLabelsSize() {
             return labelsSize;

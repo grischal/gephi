@@ -57,6 +57,7 @@ public class NodeDraftImpl extends ElementDraftImpl implements NodeDraft {
     protected float y;
     protected float z;
     protected float size;
+    protected int role;
     protected boolean fixed;
 
     public NodeDraftImpl(ImportContainerImpl container, String id) {
@@ -71,6 +72,11 @@ public class NodeDraftImpl extends ElementDraftImpl implements NodeDraft {
     @Override
     public void setSize(float size) {
         this.size = size;
+    }
+    
+    @Override
+    public void setRole(int role) {
+        this.role = role;
     }
 
     @Override
@@ -97,6 +103,11 @@ public class NodeDraftImpl extends ElementDraftImpl implements NodeDraft {
     @Override
     public float getSize() {
         return size;
+    }
+    
+    @Override
+    public int getRole() {
+        return role;
     }
 
     @Override

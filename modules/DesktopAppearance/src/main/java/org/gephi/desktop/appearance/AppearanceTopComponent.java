@@ -73,16 +73,16 @@ import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
-@ConvertAsProperties(dtd = "-//org.gephi.desktop.appearance//Appearance//EN",
-        autostore = false)
-@TopComponent.Description(preferredID = "AppearanceTopComponent",
-        iconBase = "org/gephi/desktop/appearance/resources/small.png",
-        persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "rankingmode", openAtStartup = true, roles = {"overview"})
-@ActionID(category = "Window", id = "org.gephi.desktop.appearance.AppearanceTopComponent")
-@ActionReference(path = "Menu/Window", position = 1100)
-@TopComponent.OpenActionRegistration(displayName = "#CTL_AppearanceAction",
-        preferredID = "AppearanceTopComponent")
+//@ConvertAsProperties(dtd = "-//org.gephi.desktop.appearance//Appearance//EN",
+//        autostore = false)
+//@TopComponent.Description(preferredID = "AppearanceTopComponent",
+//        iconBase = "org/gephi/desktop/appearance/resources/small.png",
+//        persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+//@TopComponent.Registration(mode = "rankingmode", openAtStartup = true, roles = {"overview"})
+//@ActionID(category = "Window", id = "org.gephi.desktop.appearance.AppearanceTopComponent")
+//@ActionReference(path = "Menu/Window", position = 1100)
+//@TopComponent.OpenActionRegistration(displayName = "#CTL_AppearanceAction",
+//        preferredID = "AppearanceTopComponent")
 public class AppearanceTopComponent extends TopComponent implements Lookup.Provider, AppearanceUIModelListener {
 
     //Const

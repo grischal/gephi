@@ -45,13 +45,16 @@ import java.awt.Color;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import org.gephi.graph.api.GraphController;
+import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.tools.spi.NodePressingEventListener;
 import org.gephi.tools.spi.Tool;
 import org.gephi.tools.spi.ToolEventListener;
 import org.gephi.tools.spi.ToolSelectionType;
 import org.gephi.tools.spi.ToolUI;
-import org.gephi.ui.tools.plugin.PainterPanel;
+import org.gephi.ui.tools.plugin.BrushPanel;
+import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -60,13 +63,15 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Mathieu Bastian
  */
 //@ServiceProvider(service = Tool.class)
-public class Painter{// implements Tool {
-//
+public class PBrush{// implements Tool {
+
+//    //Architecture
 //    private ToolEventListener[] listeners;
-//    private PainterPanel painterPanel;
+//    private BrushPanel brushPanel;
 //    //Settings
 //    private float[] color = {1f, 0f, 0f};
 //    private float intensity = 0.3f;
+//    private DiffusionMethods.DiffusionMethod diffusionMethod = DiffusionMethods.DiffusionMethod.NEIGHBORS;
 //
 //    @Override
 //    public void select() {
@@ -75,7 +80,57 @@ public class Painter{// implements Tool {
 //    @Override
 //    public void unselect() {
 //        listeners = null;
-//        painterPanel = null;
+//        brushPanel = null;
+//    }
+//
+//    private void brush(Node[] nodes) {
+//
+//        for (Node node : nodes) {
+//            float r = node.r();
+//            float g = node.g();
+//            float b = node.b();
+//            r = intensity * color[0] + (1 - intensity) * r;
+//            g = intensity * color[1] + (1 - intensity) * g;
+//            b = intensity * color[2] + (1 - intensity) * b;
+//            node.setR(r);
+//            node.setG(g);
+//            node.setB(b);
+//        }
+//
+//        for (Node node : getDiffusedNodes(nodes)) {
+//            float r = node.r();
+//            float g = node.g();
+//            float b = node.b();
+//            r = intensity * color[0] + (1 - intensity) * r;
+//            g = intensity * color[1] + (1 - intensity) * g;
+//            b = intensity * color[2] + (1 - intensity) * b;
+//            node.setR(r);
+//            node.setG(g);
+//            node.setB(b);
+//        }
+//    }
+//
+//    private Node[] getDiffusedNodes(Node[] input) {
+//        GraphModel model = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+//        switch (diffusionMethod) {
+//            case NEIGHBORS:
+//                return DiffusionMethods.getNeighbors(model.getGraphVisible(), input);
+//            case NEIGHBORS_OF_NEIGHBORS:
+//                return DiffusionMethods.getNeighborsOfNeighbors(model.getGraphVisible(), input);
+//            case PREDECESSORS:
+//                if (model.isDirected()) {
+//                    return DiffusionMethods.getPredecessors(model.getDirectedGraphVisible(), input);
+//                } else {
+//                    return DiffusionMethods.getNeighbors(model.getGraphVisible(), input);
+//                }
+//            case SUCCESSORS:
+//                if (model.isDirected()) {
+//                    return DiffusionMethods.getSuccessors(model.getDirectedGraphVisible(), input);
+//                } else {
+//                    return DiffusionMethods.getNeighbors(model.getGraphVisible(), input);
+//                }
+//        }
+//        return new Node[0];
 //    }
 //
 //    @Override
@@ -84,18 +139,10 @@ public class Painter{// implements Tool {
 //        listeners[0] = new NodePressingEventListener() {
 //            @Override
 //            public void pressingNodes(Node[] nodes) {
-//                color = painterPanel.getColor().getColorComponents(color);
-//                for (Node node : nodes) {
-//                    float r = node.r();
-//                    float g = node.g();
-//                    float b = node.b();
-//                    r = intensity * color[0] + (1 - intensity) * r;
-//                    g = intensity * color[1] + (1 - intensity) * g;
-//                    b = intensity * color[2] + (1 - intensity) * b;
-//                    node.setR(r);
-//                    node.setG(g);
-//                    node.setB(b);
-//                }
+//                diffusionMethod = brushPanel.getDiffusionMethod();
+//                color = brushPanel.getColor().getColorComponents(color);
+//                intensity = brushPanel.getIntensity();
+//                brush(nodes);
 //            }
 //
 //            @Override
@@ -110,29 +157,31 @@ public class Painter{// implements Tool {
 //        return new ToolUI() {
 //            @Override
 //            public JPanel getPropertiesBar(Tool tool) {
-//                painterPanel = new PainterPanel();
-//                painterPanel.setColor(new Color(color[0], color[1], color[2]));
-//                return painterPanel;
+//                brushPanel = new BrushPanel();
+//                brushPanel.setDiffusionMethod(diffusionMethod);
+//                brushPanel.setColor(new Color(color[0], color[1], color[2]));
+//                brushPanel.setIntensity(intensity);
+//                return brushPanel;
 //            }
 //
 //            @Override
 //            public String getName() {
-//                return NbBundle.getMessage(Painter.class, "Painter.name");
+//                return NbBundle.getMessage(Brush.class, "Brush.name");
 //            }
 //
 //            @Override
 //            public Icon getIcon() {
-//                return new ImageIcon(getClass().getResource("/org/gephi/tools/plugin/resources/painter.png"));
+//                return new ImageIcon(getClass().getResource("/org/gephi/tools/plugin/resources/brush.png"));
 //            }
 //
 //            @Override
 //            public String getDescription() {
-//                return NbBundle.getMessage(Painter.class, "Painter.description");
+//                return NbBundle.getMessage(Painter.class, "Brush.description");
 //            }
 //
 //            @Override
 //            public int getPosition() {
-//                return 100;
+//                return 110;
 //            }
 //        };
 //    }

@@ -78,6 +78,14 @@ public interface NodeDraft extends ElementDraft {
      * @return size
      */
     public float getSize();
+    
+        /**
+     * Returns this node's role.
+     *
+     * @return role
+     */
+    public int getRole();
+
 
     /**
      * Returns whether this node's position is fixed.
@@ -115,6 +123,13 @@ public interface NodeDraft extends ElementDraft {
      * @param size size
      */
     public void setSize(float size);
+    
+        /**
+     * Sets this node's role.
+     *
+     * @param role role
+     */
+    public void setRole(int role);
 
     /**
      * Sets whether this node's position is fixed.

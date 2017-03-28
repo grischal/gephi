@@ -74,7 +74,7 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author mbastian
  */
-@ServiceProvider(service = AppearanceUIController.class)
+//@ServiceProvider(service = AppearanceUIController.class)
 public class AppearanceUIController {
 
     //Classes

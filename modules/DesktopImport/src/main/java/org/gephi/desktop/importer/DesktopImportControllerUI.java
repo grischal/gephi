@@ -574,6 +574,7 @@ public class DesktopImportControllerUI implements ImportControllerUI {
         ReportPanel reportPanel = new ReportPanel();
         reportPanel.setData(finalReport, containers);
         DialogDescriptor dd = new DialogDescriptor(reportPanel, NbBundle.getMessage(DesktopImportControllerUI.class, "ReportPanel.title"));
+        
         Object response = DialogDisplayer.getDefault().notify(dd);
         reportPanel.destroy();
         finalReport.clean();

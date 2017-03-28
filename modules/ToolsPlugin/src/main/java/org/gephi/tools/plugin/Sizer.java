@@ -58,104 +58,104 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author Mathieu Bastian
  */
-@ServiceProvider(service = Tool.class)
-public class Sizer implements Tool {
-
-    private SizerPanel sizerPanel;
-    private ToolEventListener[] listeners;
-    private final float INTENSITY = 0.4f;
-    private final float LIMIT = 0.1f;
-    //Vars
-    private Node[] nodes;
-    private float[] sizes;
-
-    @Override
-    public void select() {
-    }
-
-    @Override
-    public void unselect() {
-        listeners = null;
-        sizerPanel = null;
-        nodes = null;
-        sizes = null;
-    }
-
-    @Override
-    public ToolEventListener[] getListeners() {
-        listeners = new ToolEventListener[1];
-        listeners[0] = new NodePressAndDraggingEventListener() {
-            @Override
-            public void pressNodes(Node[] nodes) {
-                Sizer.this.nodes = nodes;
-                sizes = new float[nodes.length];
-                for (int i = 0; i < nodes.length; i++) {
-                    Node n = nodes[i];
-                    sizes[i] = n.size();
-                }
-            }
-
-            @Override
-            public void released() {
-                nodes = null;
-                sizerPanel.setAvgSize(-1);
-            }
-
-            @Override
-            public void drag(float displacementX, float displacementY) {
-                if (nodes != null) {
-                    float averageSize = 0f;
-                    for (int i = 0; i < nodes.length; i++) {
-                        Node n = nodes[i];
-                        float size = sizes[i];
-                        size += displacementY * INTENSITY;
-                        if (size < LIMIT) {
-                            size = LIMIT;
-                        }
-                        averageSize += size;
-                        n.setSize(size);
-                    }
-                    averageSize /= nodes.length;
-                    sizerPanel.setAvgSize(averageSize);
-                }
-            }
-        };
-        return listeners;
-    }
-
-    @Override
-    public ToolUI getUI() {
-        return new ToolUI() {
-            @Override
-            public JPanel getPropertiesBar(Tool tool) {
-                sizerPanel = new SizerPanel();
-                return sizerPanel;
-            }
-
-            @Override
-            public String getName() {
-                return NbBundle.getMessage(Sizer.class, "Sizer.name");
-            }
-
-            @Override
-            public Icon getIcon() {
-                return new ImageIcon(getClass().getResource("/org/gephi/tools/plugin/resources/sizer.png"));
-            }
-
-            @Override
-            public String getDescription() {
-                return NbBundle.getMessage(Sizer.class, "Sizer.description");
-            }
-
-            @Override
-            public int getPosition() {
-                return 105;
-            }
-        };
-    }
-
-    @Override
-    public ToolSelectionType getSelectionType() {
-        return ToolSelectionType.SELECTION_AND_DRAGGING;
-    }
+//@ServiceProvider(service = Tool.class)
+public class Sizer{// implements Tool {
+//
+//    private SizerPanel sizerPanel;
+//    private ToolEventListener[] listeners;
+//    private final float INTENSITY = 0.4f;
+//    private final float LIMIT = 0.1f;
+//    //Vars
+//    private Node[] nodes;
+//    private float[] sizes;
+//
+//    @Override
+//    public void select() {
+//    }
+//
+//    @Override
+//    public void unselect() {
+//        listeners = null;
+//        sizerPanel = null;
+//        nodes = null;
+//        sizes = null;
+//    }
+//
+//    @Override
+//    public ToolEventListener[] getListeners() {
+//        listeners = new ToolEventListener[1];
+//        listeners[0] = new NodePressAndDraggingEventListener() {
+//            @Override
+//            public void pressNodes(Node[] nodes) {
+//                Sizer.this.nodes = nodes;
+//                sizes = new float[nodes.length];
+//                for (int i = 0; i < nodes.length; i++) {
+//                    Node n = nodes[i];
+//                    sizes[i] = n.size();
+//                }
+//            }
+//
+//            @Override
+//            public void released() {
+//                nodes = null;
+//                sizerPanel.setAvgSize(-1);
+//            }
+//
+//            @Override
+//            public void drag(float displacementX, float displacementY) {
+//                if (nodes != null) {
+//                    float averageSize = 0f;
+//                    for (int i = 0; i < nodes.length; i++) {
+//                        Node n = nodes[i];
+//                        float size = sizes[i];
+//                        size += displacementY * INTENSITY;
+//                        if (size < LIMIT) {
+//                            size = LIMIT;
+//                        }
+//                        averageSize += size;
+//                        n.setSize(size);
+//                    }
+//                    averageSize /= nodes.length;
+//                    sizerPanel.setAvgSize(averageSize);
+//                }
+//            }
+//        };
+//        return listeners;
+//    }
+//
+//    @Override
+//    public ToolUI getUI() {
+//        return new ToolUI() {
+//            @Override
+//            public JPanel getPropertiesBar(Tool tool) {
+//                sizerPanel = new SizerPanel();
+//                return sizerPanel;
+//            }
+//
+//            @Override
+//            public String getName() {
+//                return NbBundle.getMessage(Sizer.class, "Sizer.name");
+//            }
+//
+//            @Override
+//            public Icon getIcon() {
+//                return new ImageIcon(getClass().getResource("/org/gephi/tools/plugin/resources/sizer.png"));
+//            }
+//
+//            @Override
+//            public String getDescription() {
+//                return NbBundle.getMessage(Sizer.class, "Sizer.description");
+//            }
+//
+//            @Override
+//            public int getPosition() {
+//                return 105;
+//            }
+//        };
+//    }
+//
+//    @Override
+//    public ToolSelectionType getSelectionType() {
+//        return ToolSelectionType.SELECTION_AND_DRAGGING;
+//    }
 }
