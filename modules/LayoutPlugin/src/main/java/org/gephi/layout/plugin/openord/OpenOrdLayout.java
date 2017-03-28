@@ -41,9 +41,9 @@ Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.layout.plugin.openord;
 
-import gnu.trove.iterator.TIntFloatIterator;
-import gnu.trove.map.hash.TIntFloatHashMap;
-import gnu.trove.map.hash.TIntIntHashMap;
+import gnu.trove.TIntFloatHashMap;
+import gnu.trove.TIntFloatIterator;
+import gnu.trove.TIntIntHashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
