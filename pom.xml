@@ -124,17 +124,20 @@
     </developers>
 
     <!-- Properties -->
-    <properties>        
+    <properties>
+        <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
+        <gephi.build.timestamp>${maven.build.timestamp}</gephi.build.timestamp>
+        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <gephi.maven.requiredVersion>3.2.2</gephi.maven.requiredVersion>
         <netbeans.run.params.ide/>
         <netbeans.run.params>${netbeans.run.params.ide}</netbeans.run.params>
         
         <!-- Netbeans Platfrom version -->
-        <netbeans.version>RELEASE81</netbeans.version>
+        <netbeans.version>RELEASE82</netbeans.version>
         
         <!-- Graphstore version -->
-        <graphstore.version>0.5.4</graphstore.version>
+        <graphstore.version>0.5.7-SNAPSHOT</graphstore.version>
 
         <!-- Localization ZIP version, from 'http://netbeans.org/project_downloads/nblocalization' -->
         <gephi.platform.localization.version>1.1-NB80</gephi.platform.localization.version>
@@ -153,8 +156,7 @@
         <gephi.javac.fork>true</gephi.javac.fork>
         
         <!-- Testing settings -->
-        <gephi.testng.version>6.9.6</gephi.testng.version>
-        <gephi.junit.version>4.7</gephi.junit.version>
+        <gephi.testng.version>6.11</gephi.testng.version>
         <gephi.test.maxMemory>768M</gephi.test.maxMemory>
         <gephi.test.reportsDirectory>${project.build.directory}/surefire-reports/plain</gephi.test.reportsDirectory>
         <gephi.test.failureIgnore>${testFailureIgnore}</gephi.test.failureIgnore>
@@ -191,17 +193,22 @@
         <!-- GitHub site-plugin authentification -->
         <github.global.server>github</github.global.server>
         
+        <!--==== Dependency Versions ==================================================================================-->
+        
+        <gephi.slf4j.version>1.7.25</gephi.slf4j.version>
+        <gephi.sentry.raven.version>7.8.5</gephi.sentry.raven.version>
+        
         <!--==== Plugin Versions ==================================================================================-->
 
         <gephi.maven-antrun-plugin.version>1.8</gephi.maven-antrun-plugin.version>
 
-        <gephi.maven-assembly-plugin.version>2.5.5</gephi.maven-assembly-plugin.version>
+        <gephi.maven-assembly-plugin.version>3.0.0</gephi.maven-assembly-plugin.version>
 
-        <gephi.maven-clean-plugin.version>2.6.1</gephi.maven-clean-plugin.version>
+        <gephi.maven-clean-plugin.version>3.0.0</gephi.maven-clean-plugin.version>
 
-        <gephi.maven-compiler-plugin.version>3.3</gephi.maven-compiler-plugin.version>
+        <gephi.maven-compiler-plugin.version>3.6.1</gephi.maven-compiler-plugin.version>
 
-        <gephi.maven-dependency-plugin.version>2.10</gephi.maven-dependency-plugin.version>
+        <gephi.maven-dependency-plugin.version>3.0.0</gephi.maven-dependency-plugin.version>
 
         <gephi.maven-deploy-plugin.version>2.8.2</gephi.maven-deploy-plugin.version>
 
@@ -211,38 +218,35 @@
 
         <gephi.maven-install-plugin.version>2.5.2</gephi.maven-install-plugin.version>
 
-        <gephi.maven-jar-plugin.version>2.6</gephi.maven-jar-plugin.version>
+        <gephi.maven-jar-plugin.version>3.0.2</gephi.maven-jar-plugin.version>
 
         <gephi.maven-jarsigner-plugin.version>1.4</gephi.maven-jarsigner-plugin.version>
 
-        <gephi.maven-javadoc-plugin.version>2.9.1</gephi.maven-javadoc-plugin.version> 
+        <gephi.maven-javadoc-plugin.version>2.10.4</gephi.maven-javadoc-plugin.version> 
 
         <gephi.maven-license-plugin.version>1.9.0</gephi.maven-license-plugin.version>
 
-        <gephi.maven-release-plugin.version>2.5.2</gephi.maven-release-plugin.version>
+        <gephi.maven-release-plugin.version>2.5.3</gephi.maven-release-plugin.version>
 
-        <gephi.maven-resources-plugin.version>2.7</gephi.maven-resources-plugin.version>
+        <gephi.maven-resources-plugin.version>3.0.2</gephi.maven-resources-plugin.version>
 
-        <gephi.maven-site-plugin.version>3.4</gephi.maven-site-plugin.version>
+        <gephi.maven-site-plugin.version>3.6</gephi.maven-site-plugin.version>
 
-        <gephi.maven-source-plugin.version>2.4</gephi.maven-source-plugin.version>
+        <gephi.maven-source-plugin.version>3.0.1</gephi.maven-source-plugin.version>
 
-        <gephi.maven-surefire-plugin.version>2.18.1</gephi.maven-surefire-plugin.version>
+        <gephi.maven-surefire-plugin.version>2.19.1</gephi.maven-surefire-plugin.version>
 
-        <gephi.build-helper-maven-plugin.version>1.9.1</gephi.build-helper-maven-plugin.version>
+        <gephi.build-helper-maven-plugin.version>3.0.0</gephi.build-helper-maven-plugin.version>
 
-        <gephi.nbm-maven-plugin.version>3.14</gephi.nbm-maven-plugin.version>
-        
-        <gephi.maven-reactor-plugin.version>1.0</gephi.maven-reactor-plugin.version>
+        <gephi.nbm-maven-plugin.version>4.1</gephi.nbm-maven-plugin.version>
         
         <gephi.wagon-maven-plugin.version>1.0</gephi.wagon-maven-plugin.version>  
         
-        <gephi.maven-site-plugin.version>3.4</gephi.maven-site-plugin.version>
-        
-        <gephi.nexus-staging-maven-plugin.version>1.6.6</gephi.nexus-staging-maven-plugin.version>
+        <gephi.nexus-staging-maven-plugin.version>1.6.8</gephi.nexus-staging-maven-plugin.version>
         
         <gephi.site-maven-plugin.version>0.12</gephi.site-maven-plugin.version>
-
+        
+        <versioneye-maven-plugin.version>3.11.1</versioneye-maven-plugin.version>
     </properties>
     
     <!-- Maven required version -->
@@ -393,6 +397,11 @@
                 <artifactId>org-netbeans-modules-nbjunit</artifactId>
                 <version>${netbeans.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>graphstore</artifactId>
+                <version>${graphstore.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
@@ -749,6 +758,27 @@
                 <artifactId>ui-library-wrapper</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${gephi.slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-jdk14</artifactId>
+                <version>${gephi.slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.getsentry.raven</groupId>
+                <artifactId>raven</artifactId>
+                <version>${gephi.sentry.raven.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     
@@ -771,6 +801,7 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>nbm-maven-plugin</artifactId>
                     <version>${gephi.nbm-maven-plugin.version}</version>
+                    <extensions>true</extensions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -779,8 +810,19 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${gephi.maven-clean-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${gephi.maven-jar-plugin.version}</version>
+                    <configuration>
+                        <archive>
+                            <!-- required since nbm-maven-plugin 3.0-->
+                            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                        </archive>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -849,11 +891,6 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-reactor-plugin</artifactId>
-                    <version>${gephi.maven-reactor-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>${gephi.maven-assembly-plugin.version}</version>
                 </plugin>
@@ -871,6 +908,18 @@
                     <groupId>com.github.github</groupId>
                     <artifactId>site-maven-plugin</artifactId>
                     <version>${gephi.site-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.versioneye</groupId>
+                    <artifactId>versioneye-maven-plugin</artifactId>
+                    <version>${versioneye-maven-plugin.version}</version>
+                    <configuration>
+                        <visibility>public</visibility>
+                        <updatePropertiesAfterCreate>true</updatePropertiesAfterCreate>
+                        <mergeAfterCreate>true</mergeAfterCreate>
+                        <trackPlugins>true</trackPlugins>
+                        <propertiesPath>${basedir}/versioneye.properties</propertiesPath>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -896,24 +945,6 @@
                 </configuration>
             </plugin>
  
-            <!-- JAR Packaging -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <useDefaultManifestFile>true</useDefaultManifestFile> <!-- required since nbm-plugin 3.0-->
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                            <!--<goal>test-jar</goal>-->
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            
             <!-- Skip unit tests in non-deployment or release mode -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -933,7 +964,7 @@
                         <goals> 
                             <goal>copy-resources</goal> 
                         </goals> 
-                        <configuration> 
+                        <configuration>
                             <outputDirectory>${basedir}/target/</outputDirectory> 
                             <resources> 
                                 <resource> 
@@ -955,7 +986,6 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <descriptor>src/main/nbm/module.xml</descriptor>
                     <sourceManifestFile>${project.build.directory}/manifest.mf</sourceManifestFile>
                     <brandingToken>${brandingToken}</brandingToken>
                     <cluster>${brandingToken}</cluster>
@@ -1004,7 +1034,6 @@
     
     <!-- Profiles -->
     <profiles>
-        
         <!-- Profile for nighly builds and releases -->
         <profile>
             <id>deployment</id>
@@ -1018,7 +1047,7 @@
 
             <build>
                 <plugins>
-					<plugin>
+                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
